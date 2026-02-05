@@ -1,7 +1,7 @@
 <template lang="">
-  <div className="layout">
+  <div class="layout">
     <Navbar />
-    <main className="main-content">
+    <main class="main-content">
       <RouterView />
     </main>
   </div>
@@ -19,4 +19,3 @@ export default {
   },
 }
 </script>
-<style lang=""></style>
