@@ -14,7 +14,7 @@ export const useStudentStore = defineStore('students', () => {
   const loading = ref(false)
   const error = ref(null)
   const searchQuery = ref('')
-  const showAddModal = ref(false)
+  const showAddStudentModal = ref(false)
   const editingStudent = ref(null)
 
   const form = ref({
@@ -83,7 +83,7 @@ export const useStudentStore = defineStore('students', () => {
   }
 
   const setShowAddModal = (isVisible) => {
-    showAddModal.value = isVisible
+    showAddStudentModal.value = isVisible
     if (!isVisible) {
       resetForm()
     }
@@ -140,7 +140,7 @@ export const useStudentStore = defineStore('students', () => {
     loading,
     error,
     searchQuery,
-    showAddModal,
+    showAddStudentModal,
     editingStudent,
     form,
 
