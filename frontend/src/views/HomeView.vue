@@ -1,6 +1,6 @@
 <script setup>
 // libs imports
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch, computed } from 'vue'
 
 // local imports
 import AddorUpdateStudentModal from '../components/AddorUpdateStudentModal.vue'
@@ -9,6 +9,8 @@ import {
   deleteAllStudents,
   deleteStudentById,
   getLocalStorage,
+  getPaginatedStudentsData,
+  getTotalStudents,
   searchStudents,
 } from '../service/localStorageService.js'
 import { HugeiconsIcon } from '@hugeicons/vue'
@@ -58,12 +60,11 @@ const saveStudentDetails = () => {
 }
 
 const editStudentDetails = (student) => {
-  form.value = { ...student, isEdit: true }
+  form.value = { ...student }
   showAddStudentModal.value = true
 }
 
 const deleteStudent = (studentId) => {
-
   const filteredStudents = students.value.filter((student) => student.id !== studentId)
   students.value = filteredStudents
   deleteStudentById(studentId)
@@ -71,27 +72,52 @@ const deleteStudent = (studentId) => {
 
 const deleteAllStudentData = () => {
   // clear all students ref
-  students.value = [] 
+  students.value = []
 
   // update local storage
   deleteAllStudents('studentsData')
 }
 
 // search value
-const searchValue = ref("");
+const searchValue = ref('')
 
 const handleSearch = (event) => {
   searchValue.value = event.target.value.toLowerCase()
 
- setTimeout(() => {
+  setTimeout(() => {
     const searchedStudents = searchStudents(searchValue.value)
     console.log('searchedStudents', searchedStudents)
     students.value = searchedStudents
   }, 500)
 }
 
+// pagination variables
+let currentPage = ref(1)
+const itemsPerPage = 5
+
+let totalPages = ref(Math.ceil(getTotalStudents() / itemsPerPage))
+
+const isNextDisabled = computed(() => {
+  return currentPage.value >= totalPages.value
+})
+console.log('isNextDisabled', isNextDisabled.value)
+
+const isPreviousDisabled = computed(() => {
+  return currentPage.value <= 1
+})
+
+// on mounted get students data from local storage
+
 onMounted(() => {
-  const studentsData = getLocalStorage('studentsData')
+  const studentsData = getPaginatedStudentsData(currentPage.value, itemsPerPage)
+  if (studentsData) {
+    students.value = studentsData
+  }
+})
+
+// watch for current page change and update students data
+watch(currentPage, (newPage) => {
+  const studentsData = getPaginatedStudentsData(newPage, itemsPerPage)
   if (studentsData) {
     students.value = studentsData
   }
@@ -176,6 +202,27 @@ onMounted(() => {
             </td>
           </tr>
         </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="6" class="p-2 flex justify-end gap-1">
+              <button
+                @click="currentPage > 1 ? currentPage-- : null"
+                :disabled="isPreviousDisabled"
+                class="bg-gray-300 p-1 rounded-md px-2 text-black"
+              >
+                Previous
+              </button>
+
+              <button
+                :disabled="isNextDisabled"
+                @click="currentPage++"
+                class="bg-gray-300 p-1 rounded-md px-2 text-black"
+              >
+                Next
+              </button>
+            </td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   </div>

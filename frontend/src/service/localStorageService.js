@@ -66,3 +66,17 @@ export const searchStudents = (query) => {
     return fullName.includes(query?.toLowerCase())
   })
 }
+
+export const getPaginatedStudentsData = (page, limit) => {
+  const allStudents = getLocalStorage('studentsData') || []
+  console.log(allStudents, 'allStudents', page, limit)
+  const startIndex = (page - 1) * limit
+  const endIndex = page * limit
+  console.log(startIndex, endIndex, 'startIndex, endIndex', allStudents.slice(startIndex, endIndex))
+  return allStudents.slice(startIndex, endIndex)
+}
+
+export const getTotalStudents = () => {
+  const allStudents = getLocalStorage('studentsData') || []
+  return allStudents.length
+}
