@@ -3,14 +3,15 @@ import {
   createStudent,
   editStudent,
   fatcheStudent,
-  deactivateStudent
+  deactivateStudent,
 } from "../repository/studentRepository.js";
 
 export const addStudent = async (req, res) => {
   try {
-    const { standard, address, age, name } = req.body;
+    const { standard, address, age, name, rollNo, email } = req.body;
+    console.log("🚀 ~ addStudent ~ req.body:", req.body)
 
-    if (!standard || !address || !age || !name) {
+    if (!standard || !address || !age || !name || !rollNo || !email) {
       return res.status(400).json({
         meta: { success: false, message: "please fill all the details" },
         data: {},
@@ -18,6 +19,7 @@ export const addStudent = async (req, res) => {
     }
 
     const student = await createStudent(req.body);
+    console.log("🚀 ~ addStudent ~ student:", student)
 
     return res.status(201).json({
       meta: { success: true, message: "student register successfully" },
@@ -33,10 +35,16 @@ export const addStudent = async (req, res) => {
 export const getAllStudent = async (req, res) => {
   try {
     const students = await fatcheStudent();
-    console.log("🚀 ~ getAllStudent ~ students:", students);
+
+    if (students === []) {
+      return res.status(200).json({
+        meta: { success: true, message: "No Student Found" },
+        data: { students },
+      });
+    }
 
     return res.status(200).json({
-      meta: { success: true, message: "student fatch successfully" },
+      meta: { success: true, message: "student fetch successfully" },
       data: { students },
     });
   } catch (err) {
@@ -80,7 +88,7 @@ export const deleteStudent = async (req, res) => {
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({
-        meta: { success: false, message: "Invalid student id" }
+        meta: { success: false, message: "Invalid student id" },
       });
     }
 

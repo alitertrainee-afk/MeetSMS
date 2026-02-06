@@ -22,17 +22,13 @@ const handleSubmit = () => {
     @click="$emit('close')"
   >
     <div
-      class="DialogContentContainer flex flex-col gap-3 w-76 h-80 rounded-2xl bg-gray-300 text-black p-4"
+      class="DialogContentContainer flex flex-col gap-3 w-76 min-h-80 max-h-150 rounded-2xl bg-gray-300 text-black p-4"
       @click.stop
     >
       <div class="DialogHeader w-full flex justify-between items-center">
         <label class="text-lg font-semibold">Fill Student Deatils</label>
 
-        <HugeiconsIcon
-          @click="$emit('close')"
-          :icon="Close"
-          class="text-black cursor-pointer"
-        />
+        <HugeiconsIcon @click="$emit('close')" :icon="Close" class="text-black cursor-pointer" />
       </div>
       <div class="DialogBody flex flex-col justify-start gap-3 items-center">
         <input
@@ -51,6 +47,24 @@ const handleSubmit = () => {
           v-model="form.age"
           placeholder="Enter age"
           type="number"
+          class="h-10 w-full border-2 rounded-lg px-2 truncate"
+        />
+        <input
+          v-model="form.address"
+          placeholder="Enter Address"
+          type="text"
+          class="h-10 w-full border-2 rounded-lg px-2 truncate"
+        />
+        <input
+          v-model="form.standard"
+          placeholder="Enter you current Standard"
+          type="number"
+          class="h-10 w-full border-2 rounded-lg px-2 truncate"
+        />
+        <input
+          v-model="form.email"
+          placeholder="Enter Email"
+          type="text"
           class="h-10 w-full border-2 rounded-lg px-2 truncate"
         />
         <input

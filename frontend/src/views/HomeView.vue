@@ -7,7 +7,6 @@ import { Delete01Icon } from '@hugeicons/core-free-icons/index'
 // local imports
 import AddorUpdateStudentModal from '../components/AddorUpdateStudentModal.vue'
 import {
-  addorEditNewStudent,
   deleteAllStudents,
   deleteStudentById,
   getPaginatedStudentsData,
@@ -24,34 +23,6 @@ const studentStore = useStudentStore()
 
 // destructure state from student store (use store methods for actions)
 const { students, form, showAddStudentModal, currentPage, pageSize, totalPages, isNextDisabled, isPreviousDisabled } = storeToRefs(studentStore)
-
-// save studdent fuction on click of the submit button
-const saveStudentDetails = () => {
-  // push data to students
-  const findStudentIndex = students.value.findIndex((student) => student.id === form.value.id)
-
-  console.log('findStudentIndex', findStudentIndex)
-
-  if (findStudentIndex === -1) {
-    students.value.push(form.value)
-  } else {
-    students.value[findStudentIndex] = form.value
-  }
-
-  addorEditNewStudent(form.value)
-
-  // close the dialog model
-  studentStore.setShowAddModal(false);
-
-  // clean up form data for next time
-  form.value = {
-    id: null,
-    name: '',
-    rollNo: '',
-    age: '',
-    subjects: '',
-  }
-}
 
 const editStudentDetails = (student) => {
   form.value = { ...student }
@@ -93,7 +64,7 @@ const itemsPerPage = pageSize.value
 // on mounted get students data from local storage
 
 onMounted(() => {
-  const studentsData = getPaginatedStudentsData(currentPage.value, itemsPerPage)
+  const studentsData = studentStore.fetchStudents();
   if (studentsData) {
     studentStore.setStudents(studentsData)
     studentStore.setTotalItems(getTotalStudents())
@@ -134,7 +105,7 @@ watch(currentPage, (newPage) => {
 
       <AddorUpdateStudentModal
         v-model:form="form"
-        @submits="saveStudentDetails"
+        @submits="studentStore.createStudent"
         :show="showAddStudentModal"
         @close="studentStore.setShowAddModal(false)"
       />

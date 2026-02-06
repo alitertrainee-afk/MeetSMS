@@ -3,7 +3,7 @@ const NODE_ENV = import.meta.env.NODE_ENV // 'development' or 'production'
 // config for
 export const config = {
   // API Configuration
-  VUE_API_URL: NODE_ENV === 'development' ? 'http://localhost:8000/api' : 'production-url',
+  VUE_API_URL: NODE_ENV === 'development' ? 'http://localhost:8000/api' : 'http://localhost:8000',
 
   // Client configuration
   VUE_CLIENT_URL: import.meta.VUE_CLIENT_URL,

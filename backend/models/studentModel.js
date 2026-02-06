@@ -11,7 +11,7 @@ const studentSchema = new mongoose.Schema(
       uniqe: true,
       required: true,
     },
-    rollno: {
+    rollNo: {
       type: Number,
       uniqe: true,
       required: true,
@@ -26,6 +26,10 @@ const studentSchema = new mongoose.Schema(
     },
     standard: {
       type: Number,
+      required: true,
+    },
+    subjects: {
+      type: Array,
       required: true,
     },
     isActive: {

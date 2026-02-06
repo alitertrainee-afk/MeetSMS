@@ -4,6 +4,7 @@ import { ref, computed } from 'vue'
 
 // local imports
 import { config } from '@/config/environment.js'
+import * as studentApi from '@/service/studentApiService.js'
 
 export const useStudentStore = defineStore('students', () => {
   // State
@@ -21,6 +22,8 @@ export const useStudentStore = defineStore('students', () => {
     name: '',
     rollNo: '',
     age: '',
+    standard: '',
+    address: '',
     subjects: [],
   })
 
@@ -29,6 +32,8 @@ export const useStudentStore = defineStore('students', () => {
       name: '',
       rollNo: '',
       age: '',
+      standard: '',
+      address: '',
       subjects: [],
     }
     editingStudent.value = null
@@ -92,6 +97,8 @@ export const useStudentStore = defineStore('students', () => {
   const addStudent = (student) => {
     students.value.push(student)
     totalItems.value += 1
+
+    // call the
   }
 
   const updateStudent = (studentId, updates) => {
@@ -117,6 +124,58 @@ export const useStudentStore = defineStore('students', () => {
     students.value = []
     totalItems.value = 0
     currentPage.value = 1
+  }
+
+  // Async actions (call API then update store state)
+  const fetchStudents = async (opts = {}) => {
+    setLoading(true)
+    clearError()
+    try {
+      const params = {
+        page: currentPage.value,
+        size: pageSize.value,
+        q: searchQuery.value,
+        ...opts,
+      }
+      const resp = await studentApi.fetchStudents(params)
+      console.log('🚀 ~ fetchStudents ~ resp:', resp)
+
+      // resp may be an array or an object containing items + total
+      if (Array.isArray(resp)) {
+        setStudents(resp)
+        setTotalItems(resp.length)
+      } else {
+        const items = resp.students || resp.data || resp.items || resp.results || []
+        setStudents(items)
+        const total = resp.total || resp.totalItems || resp.count || items.length
+        setTotalItems(total)
+      }
+    } catch (err) {
+      setError(err?.message || 'Failed to fetch students')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const createStudent = async (formData) => {
+    setLoading(true)
+    clearError()
+    try {
+      const created = await studentApi.createStudent(formData)
+
+      // created may be the new student object or wrapped
+      const studentObj = created.student || created.data || created || null
+      if (studentObj) {
+        addStudent(studentObj)
+      }
+
+      return created
+    } catch (err) {
+      setError(err?.message || 'Failed to create student')
+      throw err
+    } finally {
+      setLoading(false)
+    }
   }
 
   const nextPage = () => {
@@ -161,6 +220,8 @@ export const useStudentStore = defineStore('students', () => {
     setSearchQuery,
     setShowAddModal,
     addStudent,
+    fetchStudents,
+    createStudent,
     updateStudent,
     deleteStudent,
     deleteAllStudents,
