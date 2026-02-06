@@ -4,7 +4,7 @@ const router = express.Router()
 
 router.post('/create',addStudent )
 router.get('/getAll',getAllStudent )
-router.post('/edit',updateStudent )
-router.post('/deleteStudent',deleteStudent )
+router.patch('/:id',updateStudent )
+router.delete('/:id',deleteStudent )
 
 export default router
