@@ -9,6 +9,7 @@ const emit = defineEmits(['close', 'submits'])
 
 const form = defineModel('form')
 console.log('FORM DATA', form.value)
+
 const handleSubmit = () => {
   emit('submits', form.value)
   emit('close')

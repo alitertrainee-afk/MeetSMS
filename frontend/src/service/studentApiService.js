@@ -7,10 +7,16 @@ export const createStudent = (form) => {
 }
 
 export const fetchStudents = (params = {}) => {
-	return apiClient.get(API_ENDPOINTS.STUDENTS, { params }).then((res) => res.data)
+	return apiClient.get(API_ENDPOINTS.STUDENTS, { params }).then((res) => {
+	    console.log("🚀 ~ fetchStudents ~ res:", res)
+	    return res.data;
+	})
 }
 
 export const updateStudent = (id, payload) => {
+console.log("🚀 ~ updateStudent ~ payload:", payload)
+return
+    
 	return apiClient.put(API_ENDPOINTS.STUDENT_BY_ID(id), payload).then((res) => res.data)
 }
 

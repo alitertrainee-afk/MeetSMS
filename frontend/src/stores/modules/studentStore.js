@@ -138,14 +138,14 @@ export const useStudentStore = defineStore('students', () => {
         ...opts,
       }
       const resp = await studentApi.fetchStudents(params)
-      console.log('🚀 ~ fetchStudents ~ resp:', resp)
+      console.log('🚀 ~ fetchStudents ~ resp:', resp.data.students)
 
       // resp may be an array or an object containing items + total
       if (Array.isArray(resp)) {
         setStudents(resp)
         setTotalItems(resp.length)
       } else {
-        const items = resp.students || resp.data || resp.items || resp.results || []
+        const items = resp.data.students || resp.data || resp.items || resp.results || []
         setStudents(items)
         const total = resp.total || resp.totalItems || resp.count || items.length
         setTotalItems(total)
@@ -158,10 +158,12 @@ export const useStudentStore = defineStore('students', () => {
   }
 
   const createStudent = async (formData) => {
+    console.log('🚀 ~ createStudent ~ formData:', formData)
     setLoading(true)
     clearError()
     try {
       const created = await studentApi.createStudent(formData)
+      console.log('🚀 ~ createStudent ~ created:', created)
 
       // created may be the new student object or wrapped
       const studentObj = created.student || created.data || created || null
@@ -175,6 +177,41 @@ export const useStudentStore = defineStore('students', () => {
       throw err
     } finally {
       setLoading(false)
+    }
+  }
+
+  const editStudent = async (formData) => {
+    console.log("🚀 ~ editStudent ~ formData:", formData)
+    setLoading(true)
+    clearError()
+    try {
+      const created = await studentApi.updateStudent(formData)
+      console.log("🚀 ~ editStudent ~ created:", created)
+
+      // created may be the new student object or wrapped
+      const studentObj = created.student || created.data || created || null
+      if (studentObj) {
+        updateStudent(studentObj)
+      }
+
+      return created
+    } catch (err) {
+      setError(err?.message || 'Failed to create student')
+      throw err
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const submitStudent = async (formData) => {
+    console.log("🚀 ~ submitStudent ~ formData:", formData)
+    console.log("🚀 ~ submitStudent ~ editingStudent:", editingStudent)
+    if (editingStudent.value) {
+      // UPDATE
+      return await editStudent(formData)
+    } else {
+      // CREATE
+      return await createStudent(formData)
     }
   }
 
@@ -203,6 +240,7 @@ export const useStudentStore = defineStore('students', () => {
     editingStudent,
     form,
 
+
     // Computed
     totalPages,
     isNextDisabled,
@@ -211,6 +249,8 @@ export const useStudentStore = defineStore('students', () => {
 
     // Methods
     resetForm,
+    submitStudent,
+    updateStudent,
     setStudents,
     setTotalItems,
     setCurrentPage,

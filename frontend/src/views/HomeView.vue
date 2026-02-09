@@ -22,11 +22,12 @@ import { storeToRefs } from 'pinia'
 const studentStore = useStudentStore()
 
 // destructure state from student store (use store methods for actions)
-const { students, form, showAddStudentModal, currentPage, pageSize, totalPages, isNextDisabled, isPreviousDisabled } = storeToRefs(studentStore)
+const { students, form, showAddStudentModal, currentPage, pageSize, editingStudent, totalPages, isNextDisabled, isPreviousDisabled } = storeToRefs(studentStore)
 
 const editStudentDetails = (student) => {
   form.value = { ...student }
-  studentStore.setShowAddModal(true)
+  studentStore.setShowAddModal(true);
+  editingStudent.value = true
 }
 
 const deleteStudent = (studentId) => {
@@ -105,7 +106,7 @@ watch(currentPage, (newPage) => {
 
       <AddorUpdateStudentModal
         v-model:form="form"
-        @submits="studentStore.createStudent"
+        @submits="studentStore.submitStudent"
         :show="showAddStudentModal"
         @close="studentStore.setShowAddModal(false)"
       />
