@@ -3,7 +3,7 @@ import express from "express";
 import cors from "cors";
 
 // local imports
-import studentroute from "../routes/studentRoutes.js";
+import studentroute from "../routes/student.routes.js";
 
 const app = express();
 

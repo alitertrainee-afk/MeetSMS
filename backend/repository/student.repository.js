@@ -1,4 +1,5 @@
-import Student from "../models/studentModel.js";
+// local imports
+import Student from "../models/Student.js";
 
 export const createStudent = async (data) => {
   const newStudnt = await Student.create(data);

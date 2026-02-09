@@ -1,11 +1,16 @@
+// libs imports
 import mongoose from "mongoose";
+
+// local imports
 import {
   createStudent,
   editStudent,
   fatcheStudent,
   deactivateStudent,
-} from "../repository/studentRepository.js";
+} from "../repository/student.repository.js";
 
+
+// Add new student to database
 export const addStudent = async (req, res) => {
   try {
     const { standard, address, age, name, rollNo, email } = req.body;
@@ -32,6 +37,8 @@ export const addStudent = async (req, res) => {
     });
   }
 };
+
+// fetch all the students fromt the database
 export const getAllStudent = async (req, res) => {
   try {
     const students = await fatcheStudent();
@@ -53,6 +60,8 @@ export const getAllStudent = async (req, res) => {
       .json({ meta: { success: false, message: err.message }, data: {} });
   }
 };
+
+// update current student details
 export const updateStudent = async (req, res) => {
   try {
     const { id } = req.params;
@@ -82,6 +91,8 @@ export const updateStudent = async (req, res) => {
     });
   }
 };
+
+// delete individual student by id
 export const deleteStudent = async (req, res) => {
   try {
     const { id } = req.params;
