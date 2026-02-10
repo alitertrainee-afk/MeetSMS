@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { StudentsIcon } from '@hugeicons/core-free-icons/index'
 import { HugeiconsIcon } from '@hugeicons/vue'
+
+const sidebarItems = {
+    
+}
 </script>
 
 <template>

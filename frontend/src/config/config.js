@@ -9,6 +9,10 @@ export const API_ENDPOINTS = {
   STUDENT_BY_ID: (id) => `/students/${id}`,
   SEARCH_STUDENTS: '/students/search',
   DELETE_ALL_STUDENTS: '/students',
+
+  // User Endpoints
+  REGISTER: '/user/register',
+  LOGIN: '/user/login'
 }
 
 export function getFullUrl(endpoint) {
