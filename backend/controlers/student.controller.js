@@ -43,7 +43,7 @@ export const getAllStudent = async (req, res) => {
   try {
     const students = await fatcheStudent();
 
-    if (students === []) {
+    if (students?.length === 0) {
       return res.status(200).json({
         meta: { success: true, message: "No Student Found" },
         data: { students },
