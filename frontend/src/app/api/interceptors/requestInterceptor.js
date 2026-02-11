@@ -1,17 +1,16 @@
 // local imports
 import { getLocalStorage } from '@/service/localStorageService'
+import { useAuthStore } from '@/stores/modules/authStore'
 
 export const setupRequestInterceptor = (apiCLient) => {
   apiCLient.interceptors.request.use(
     (config) => {
-      // Get token from localStorage
-      const token = getLocalStorage('accessToken')
-      
-      // Add Authorization header with Bearer token if token exists
+      const token = getLocalStorage('auth').accessToken
+
       if (token) {
         config.headers.Authorization = `Bearer ${token}`
       }
-      
+
       return config
     },
     (error) => {

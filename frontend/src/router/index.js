@@ -12,54 +12,49 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'Layout',
       component: Layout,
       meta: { requiresAuth: true },
       children: [
         {
-          path: '/',
+          path: '',
           name: 'Home',
           component: () => import('../pages/HomeView.vue'),
         },
       ],
     },
     {
-      path: '/',
-      name: 'AuthLayout',
+      path: '/auth',
       component: AuthLayout,
       children: [
         {
-          path: '/login',
+          path: 'login',
           name: 'Login',
           component: LoginView,
         },
         {
-          path: '/register',
+          path: 'register',
           name: 'Register',
           component: RegisterView,
         },
       ],
     },
   ],
-})  
+})
 
-router.beforeEach((to, from, next) => {
-  const token = getLocalStorage('accessToken')
-  console.log('🚀 ~ token:', token)
+router.beforeEach((to) => {
+  const authStore = getLocalStorage("auth")
+  const isAuthenticated = !!authStore.accessToken
 
-  if (token && (to.name === 'Login' || to.name === 'Register')) {
-    return next('/')
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    return { name: 'Login' }
   }
 
-  if (to.meta.requiresAuth) {
-    if (token) {
-      return next()
-    } else {
-      return next({ name: 'Login' })
-    }
+  if (isAuthenticated && (to.name === 'Login' || to.name === 'Register')) {
+    return { name: 'Home' }
   }
 
-  next()
+  // ✅ allow navigation
+  return true
 })
 
 export default router

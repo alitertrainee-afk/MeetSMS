@@ -30,7 +30,7 @@ const submitForm = () => {
   <form class="space-y-4" @submit.prevent="submitForm">
     <TextInputField label="Email" type="email" placeholder="you@example.com" v-model="form.email" />
 
-    <PasswordInputField v-model="form.password" />
+    <PasswordInputField placeholder="*******" v-model="form.password" />
 
     <BaseButton type="submit" :loading="loading"> Login </BaseButton>
   </form>

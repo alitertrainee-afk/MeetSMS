@@ -49,11 +49,6 @@ export const useAuthStore = defineStore(
     }
   },
   {
-    // ⭐ THIS IS THE IMPORTANT PART
-    persist: {
-      key: 'accessToken',
-      storage: localStorage,
-      paths: ['accessToken'],
-    },
+    persist: true
   },
 )
