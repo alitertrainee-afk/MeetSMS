@@ -1,11 +1,11 @@
 // local imports
 import User from "../models/User.js";
 
-export const findUserByIdentifier = async (key, value) => {
-  return await User.findOne({ [key]: value });
+export const findUserByEmailRepo = async (email) => {
+  return User.findOne({ email });
 };
 
-export const createUser = async (userObj) => {
+export const createUserRepo = async (userObj) => {
   return await User.create(userObj);
 };
 

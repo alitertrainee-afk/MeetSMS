@@ -2,7 +2,7 @@
 import express from "express";
 
 // local imports
-import { register, login } from "../controlers/user.controller.js"
+import { register, login } from "../controlers/auth.controller.js"
 import { validate } from "../app/validations/validate.js";
 import { loginSchema, registerSchema } from "../app/validations/schemas/auth.validator.js";
 import { authLimiter } from "../middleware/ratelimit.middleware.js";
