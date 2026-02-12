@@ -1,7 +1,7 @@
 // libs imports
 import mongoose from "mongoose";
-import { logger } from "../config/logger.js";
-import { env } from "../config/env.js";
+import { logger } from "./logger.js";
+import { env } from "./env.js";
 
 export const connect = async () => {
   try {
