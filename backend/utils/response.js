@@ -13,8 +13,6 @@ export const errorResponse = (
   res,
   { statusCode = 500, message = "Something went wrong.", data = null },
 ) => {
-  console.log("🚀 ~ errorResponse ~ message:", message)
-  console.log("🚀 ~ errorResponse ~ statusCode:", statusCode)
   return res.status(statusCode).json({
     success: false,
     message,

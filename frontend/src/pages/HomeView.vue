@@ -1,6 +1,7 @@
 <script setup>
 // libs imports
 import { onMounted, ref, watch, computed } from 'vue'
+import { storeToRefs } from 'pinia'
 import { HugeiconsIcon } from '@hugeicons/vue'
 import { Delete01Icon } from '@hugeicons/core-free-icons/index'
 
@@ -16,22 +17,30 @@ import {
 import StudentTable from '@/components/student/StudentTable.vue'
 import StudentSearchBar from '@/components/student/StudentSearchBar.vue'
 import { useStudentStore } from '@/stores'
-import { storeToRefs } from 'pinia'
 
 // use Pinia Student Store
 const studentStore = useStudentStore()
 
 // destructure state from student store (use store methods for actions)
-const { students, form, showAddStudentModal, currentPage, pageSize, editingStudent, totalPages, isNextDisabled, isPreviousDisabled } = storeToRefs(studentStore)
+const {
+  students,
+  form,
+  showAddStudentModal,
+  currentPage,
+  pageSize,
+  editingStudent,
+  totalPages,
+  isNextDisabled,
+  isPreviousDisabled,
+} = storeToRefs(studentStore)
 
 const editStudentDetails = (student) => {
   form.value = { ...student }
-  studentStore.setShowAddModal(true);
+  studentStore.setShowAddModal(true)
   editingStudent.value = true
 }
 
 const deleteStudent = (studentId) => {
-  console.log(studentId)
   const filteredStudents = students.value.filter((student) => student.id !== studentId)
   students.value = filteredStudents
   deleteStudentById(studentId)
@@ -65,7 +74,7 @@ const itemsPerPage = pageSize.value
 // on mounted get students data from local storage
 
 onMounted(() => {
-  const studentsData = studentStore.fetchStudents();
+  const studentsData = studentStore.fetchStudents()
   if (studentsData) {
     studentStore.setStudents(studentsData)
     studentStore.setTotalItems(getTotalStudents())
@@ -84,23 +93,31 @@ watch(currentPage, (newPage) => {
 <template>
   <div class="MainContainer lg:px-30 p-1 border-amber-400">
     <div class="TableContainer">
-      <div class="TableHeader w-full flex items-center justify-between gap-1">
-        <div class="LeftElements flex gap-1 items-center justify-start w-full">
-          <button
-            @click="studentStore.setShowAddModal(true)"
-            class="cursor-pointer bg-blue-400 font-bold h-12 w-40 truncate px-2 rounded-lg text-white border-black border-2"
-          >
-            + New Student
-          </button>
-          <StudentSearchBar v-model="searchValue" />
-        </div>
-        <div>
-          <button
-            @click="deleteAllStudentData"
-            class="flex w-full bg-red-600 p-2 rounded-lg border-2 border-black text-white gap-2 cursor-pointer"
-          >
-            <HugeiconsIcon :icon="Delete01Icon" /> Delete All
-          </button>
+      <div class="mb-6 rounded-xl bg-white p-4 shadow-sm border border-slate-100">
+        <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
+          <!-- LEFT -->
+          <div class="flex gap-3 items-center w-full sm:w-auto">
+            <!-- Add Button -->
+            <button
+              @click="studentStore.setShowAddModal(true)"
+              class="flex items-center justify-center h-10 px-4 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition shadow-sm"
+            >
+              + Add New Student
+            </button>
+
+            <!-- Search -->
+            <StudentSearchBar v-model="searchValue" />
+          </div>
+
+          <!-- RIGHT -->
+          <div class="w-full sm:w-auto">
+            <button
+              @click="deleteAllStudentData"
+              class="flex items-center justify-center gap-2 h-10 px-4 rounded-lg bg-white border border-slate-200 text-red-600 text-sm font-medium hover:bg-red-50 transition shadow-sm w-full"
+            >
+              <HugeiconsIcon :icon="Delete01Icon"/>
+            </button>
+          </div>
         </div>
       </div>
 

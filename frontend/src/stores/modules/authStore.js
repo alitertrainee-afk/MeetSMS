@@ -18,10 +18,12 @@ export const useAuthStore = defineStore(
 
       try {
         const response = await userApi.login(formData)
+        console.log("🚀 ~ login ~ userApi:", userApi)
 
         if (response.success) {
           user.value = response.data.user
           accessToken.value = response.data.accessToken
+          error.value = null
         }
       } catch (err) {
         error.value = err?.response?.data?.message || 'Invalid credentials'

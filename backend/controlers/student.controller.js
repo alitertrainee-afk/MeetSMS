@@ -8,13 +8,13 @@ import {
   fatcheStudent,
   deactivateStudent,
 } from "../repository/student.repository.js";
-
+import { logger } from "../config/logger.js";
 
 // Add new student to database
 export const addStudent = async (req, res) => {
   try {
     const { standard, address, age, name, rollNo, email } = req.body;
-    console.log("🚀 ~ addStudent ~ req.body:", req.body)
+    logger.debug("🚀 ~ addStudent ~ req.body:", req.body);
 
     if (!standard || !address || !age || !name || !rollNo || !email) {
       return res.status(400).json({
@@ -24,7 +24,7 @@ export const addStudent = async (req, res) => {
     }
 
     const student = await createStudent(req.body);
-    console.log("🚀 ~ addStudent ~ student:", student)
+    logger.log("🚀 ~ addStudent ~ student:", student);
 
     return res.status(201).json({
       meta: { success: true, message: "student register successfully" },
@@ -105,8 +105,8 @@ export const deleteStudent = async (req, res) => {
 
     const student = await deactivateStudent(id);
 
-    return res.status(201).json({
-      meta: { success: true, message: "student register successfully" },
+    return res.status(200).json({
+      meta: { success: true, message: "student deactivated" },
       data: { student },
     });
   } catch (error) {

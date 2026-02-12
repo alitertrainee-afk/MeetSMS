@@ -8,95 +8,89 @@ import {
   findUserByIdentifier,
 } from "../repository/user.repository.js";
 import { successResponse, errorResponse } from "../utils/response.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { logger } from "../config/logger.js";
 
-export const register = async (req, res) => {
-  try {
-    const { username, email, password } = req.body;
+export const register = asyncHandler(async (req, res) => {
+  const { username, email, password } = req.body;
 
-    if (!username || !email || !password) {
-      return errorResponse(res, {
-        statusCode: 401,
-        message: "All fields are required.",
-      });
-    }
-
-    const existingUser = await findUserByIdentifier("email", email);
-
-    if (existingUser) {
-      return errorResponse(res, {
-        statusCode: 409,
-        message: "User is already registered.",
-      });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 12);
-
-    const user = await createUser({
-      username,
-      email,
-      password: hashedPassword,
+  if (!username || !email || !password) {
+    return errorResponse(res, {
+      statusCode: 401,
+      message: "All fields are required.",
     });
-
-    return successResponse(res, {
-      statusCode: 201,
-      message: "User successfully registered.",
-    });
-  } catch (error) {
-    console.error(error);
-    return errorResponse(res, { error: error });
   }
-};
 
-export const login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    console.log("🚀 ~ login ~ req.body:", req.body);
+  const existingUser = await findUserByIdentifier("email", email);
 
-    if (!email || !password) {
-      return errorResponse(res, res, {
-        statusCode: 401,
-        message: "All fields are required.",
-      });
-    }
+  if (existingUser) {
+    return errorResponse(res, {
+      statusCode: 409,
+      message: "User is already registered.",
+    });
+  }
 
-    const existingUser = await findUserByIdentifier("email", email);
+  const hashedPassword = await bcrypt.hash(password, 12);
 
-    if (!existingUser) {
-      console.log("🚀 ~ login ~ existingUser:", existingUser);
-      return errorResponse(res, {
-        statusCode: 401,
-        message: "User is not registered",
-      });
-    }
+  await createUser({
+    username,
+    email,
+    password: hashedPassword,
+  });
 
-    const isPasswordValid = await bcrypt.compare(
-      password,
-      existingUser?.password,
-    );
+  return successResponse(res, {
+    statusCode: 201,
+    message: "User successfully registered.",
+  });
+});
 
-    if (!isPasswordValid) {
-      return errorResponse(res, {
-        statusCode: 401,
-        message: "Invalid credentials",
-      });
-    }
+export const login = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+  logger.log("🚀 ~ req.body:", req.body)
 
-    const accessToken = jwt.sign(
-      { userId: existingUser?._id },
-      process.env.JWT_SECRET,
-      { expiresIn: "7d" },
-    );
+  if (!email || !password) {
+    return errorResponse(res, {
+      statusCode: 401,
+      message: "All fields are required.",
+    });
+  }
 
-    return successResponse(res, {
-      statusCode: 201,
-      message: "Logged in successfully",
-      data: {
-        user: existingUser,
-        accessToken,
+  const existingUser = await findUserByIdentifier("email", email);
+
+  if (!existingUser) {
+    return errorResponse(res, {
+      statusCode: 401,
+      message: "User is not registered",
+    });
+  }
+
+  const isPasswordValid = await bcrypt.compare(
+    password,
+    existingUser?.password,
+  );
+
+  if (!isPasswordValid) {
+    return errorResponse(res, {
+      statusCode: 401,
+      message: "Invalid credentials",
+    });
+  }
+
+  const accessToken = jwt.sign(
+    { userId: existingUser?._id },
+    process.env.JWT_SECRET,
+    { expiresIn: "7d" },
+  );
+
+  return successResponse(res, {
+    statusCode: 201,
+    message: "Logged in successfully",
+    data: {
+      user: {
+        username: existingUser?.username,
+        email: existingUser?.email,
       },
-    });
-  } catch (error) {
-    console.error(error);
-    return errorResponse(res, { error: error });
-  }
-};
+      accessToken,
+    },
+  });
+});

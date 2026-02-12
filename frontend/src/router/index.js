@@ -23,7 +23,7 @@ const router = createRouter({
       ],
     },
     {
-      path: '/auth',
+      path: '/',
       component: AuthLayout,
       children: [
         {
@@ -42,8 +42,9 @@ const router = createRouter({
 })
 
 router.beforeEach((to) => {
-  const authStore = getLocalStorage("auth")
-  const isAuthenticated = !!authStore.accessToken
+  const authStore = getLocalStorage('auth')
+
+  const isAuthenticated = !!authStore?.accessToken
 
   if (to.meta.requiresAuth && !isAuthenticated) {
     return { name: 'Login' }
@@ -53,7 +54,6 @@ router.beforeEach((to) => {
     return { name: 'Home' }
   }
 
-  // ✅ allow navigation
   return true
 })
 
