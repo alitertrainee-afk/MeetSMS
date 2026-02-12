@@ -10,6 +10,7 @@ import {
 import { successResponse, errorResponse } from "../utils/response.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { logger } from "../config/logger.js";
+import { env } from "../config/env.js";
 
 export const register = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
@@ -46,7 +47,7 @@ export const register = asyncHandler(async (req, res) => {
 
 export const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  logger.log("🚀 ~ req.body:", req.body)
+  logger.log("🚀 ~ req.body:", req.body);
 
   if (!email || !password) {
     return errorResponse(res, {
@@ -76,11 +77,9 @@ export const login = asyncHandler(async (req, res) => {
     });
   }
 
-  const accessToken = jwt.sign(
-    { userId: existingUser?._id },
-    process.env.JWT_SECRET,
-    { expiresIn: "7d" },
-  );
+  const accessToken = jwt.sign({ userId: existingUser?._id }, env.JWT_SECRET, {
+    expiresIn: "7d",
+  });
 
   return successResponse(res, {
     statusCode: 201,

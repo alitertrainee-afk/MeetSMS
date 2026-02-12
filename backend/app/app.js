@@ -11,6 +11,7 @@ import { morganMiddleware } from "../middleware/morgan.middleware.js";
 // routes imports
 import userRoutes from "../routes/user.routes.js";
 import studentroute from "../routes/student.routes.js";
+import { env } from "../config/env.js";
 
 const app = express();
 
@@ -19,7 +20,7 @@ app.use(morganMiddleware);
 app.use(express.json());
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: env.CLIENT_URL,
     credentials: true,
   }),
 );

@@ -6,11 +6,11 @@ dotenv.config();
 import { connect } from "./database/db.js";
 import app from "./app/app.js";
 import { logger } from "./config/logger.js";
+import { env } from "./config/env.js";
 
-const PORT = process.env.PORT;
 connect()
   .then(() => {
-    app.listen(PORT, () => {
+    app.listen(env.PORT, () => {
       logger.info(`server listen on port${PORT}`);
     });
   })

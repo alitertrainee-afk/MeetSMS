@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { env } from "../config/env";
 
 export const verifyToken = (req, res, next) => {
   try {
@@ -36,7 +37,7 @@ export const verifyToken = (req, res, next) => {
     }
 
     // 4. Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, env.JWT_SECRET);
 
     // 5. Attach decoded payload (flexible)
     req.user = {
