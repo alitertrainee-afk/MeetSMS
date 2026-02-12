@@ -1,40 +1,25 @@
 // local imports
 import Student from "../models/Student.js";
 
-export const createStudent = async (data) => {
-  const newStudnt = await Student.create(data);
-  return newStudnt;
+export const createStudentRepo = async (data) => {
+  return Student.create(data);
 };
 
-export const fatcheStudent = async () => {
-  const allStudent = await Student.find();
-  return allStudent;
+export const fetchStudentsRepo = async () => {
+  return Student.find();
 };
 
-export const fetchStudentById = async (id) => {
-  const student = await Student.findById(id);
-  return student;
-}
-
-export const editStudent = async (id, data) => {
-  const updatedStudent = await Student.findByIdAndUpdate(
-    id,
-    data,
-    {
-      new: true,        // return updated document
-      runValidators: true
-    }
-  );
-
-  return updatedStudent;
+export const findStudentByIdRepo = async (id) => {
+  return Student.findById(id);
 };
 
-export const deactivateStudentById = async (id) => {
-  const student = await Student.findByIdAndUpdate(
-    id,
-    { isActive: false },
-    { new: true }
-  );
+export const updateStudentRepo = async (id, data) => {
+  return Student.findByIdAndUpdate(id, data, {
+    new: true,
+    runValidators: true,
+  });
+};
 
-  return student;
+export const deactivateStudentByIdRepo = async (id) => {
+  return Student.findByIdAndUpdate(id, { isActive: false }, { new: true });
 };
