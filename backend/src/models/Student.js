@@ -40,6 +40,11 @@ const studentSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+studentSchema.index({ isActive: 1, createdAt: -1 });
+studentSchema.index({ standard: 1 });
+studentSchema.index({ age: 1 });
+studentSchema.index({ email: 1 });
+
 const Student = mongoose.model("Student", studentSchema);
 
 export default Student;

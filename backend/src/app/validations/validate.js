@@ -13,7 +13,6 @@ export const validate = (schema) => {
         query: req.query,
         params: req.params,
       });
-      logger.debug("🚀 ~ validate ~ validated:", validated);
 
       // sanitized body
       req.body = validated.body;
@@ -36,7 +35,6 @@ export const validate = (schema) => {
           })),
         });
       }
-      console.log("🚀 ~ validate ~ error:", error);
 
       return errorResponse(res, {
         statusCode: 500,

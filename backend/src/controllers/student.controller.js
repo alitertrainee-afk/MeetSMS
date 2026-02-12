@@ -9,6 +9,7 @@ import {
   fetchStudentsService,
   updateStudentService,
 } from "../service/student.service.js";
+import { parseQuery } from "../utils/parseQuery.js";
 
 // Add new student to database
 export const addStudent = asyncHandler(async (req, res, next) => {
@@ -23,7 +24,8 @@ export const addStudent = asyncHandler(async (req, res, next) => {
 
 // fetch all the students fromt the database
 export const getAllStudent = asyncHandler(async (req, res) => {
-  const students = await fetchStudentsService();
+  const queryOptions = parseQuery(req.query);
+  const students = await fetchStudentsService(queryOptions);
 
   return successResponse(res, {
     statusCode: 200,

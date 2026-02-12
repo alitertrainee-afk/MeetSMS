@@ -20,6 +20,18 @@ export const updateStudentRepo = async (id, data) => {
   });
 };
 
+export const findStudents = (query, options) => {
+  return Student.find(query)
+    .sort(options.sort)
+    .skip(options.skip)
+    .limit(options.limit)
+    .lean();
+};
+
+export const countStudents = (query) => {
+  return Student.countDocuments(query);
+};
+
 export const deactivateStudentByIdRepo = async (id) => {
   return Student.findByIdAndUpdate(id, { isActive: false }, { new: true });
 };
