@@ -12,7 +12,10 @@ import { morganMiddleware } from "../middleware/morgan.middleware.js";
 // routes imports
 import userRoutes from "../routes/user.routes.js";
 import studentroute from "../routes/student.routes.js";
+
+// local imports
 import { env } from "../config/env.js";
+import { apiLimiter } from "../middleware/ratelimit.middleware.js";
 
 const app = express();
 
@@ -26,6 +29,7 @@ app.use(
     credentials: true,
   }),
 );
+app.use(apiLimiter)
 
 // routes
 app.use("/user", userRoutes);
