@@ -1,11 +1,23 @@
+// local imports
+import { logger } from "../config/logger.js";
+import { ApiError } from "./ApiError.js";
+import { errorResponse } from "./response.js";
+
 export const errorHandler = (err, req, res, next) => {
-  logger.error(err);
+  let statusCode = 500;
+  let message = "Internal Server Error";
 
-  const statusCode = err.statusCode || 500;
+  if (err instanceof ApiError && err.isOperational) {
+    statusCode = err.statusCode;
+    message = err.message;
+  }
 
-  res.status(statusCode).json({
-    success: false,
-    message: err.message || "Internal Server Error",
-    data: null,
-  });
+  // Logging
+  if (process.env.NODE_ENV !== "production") {
+    logger.error(err);
+  } else {
+    logger.error(`[ERROR] ${message}`);
+  }
+
+  return errorResponse(res, { statusCode, message });
 };
