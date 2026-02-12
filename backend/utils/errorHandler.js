@@ -1,4 +1,5 @@
 // local imports
+import { env } from "../config/env.js";
 import { logger } from "../config/logger.js";
 import { ApiError } from "./ApiError.js";
 import { errorResponse } from "./response.js";
@@ -13,7 +14,7 @@ export const errorHandler = (err, req, res, next) => {
   }
 
   // Logging
-  if (process.env.NODE_ENV !== "production") {
+  if (env.NODE_ENV !== "production") {
     logger.error(err);
   } else {
     logger.error(`[ERROR] ${message}`);

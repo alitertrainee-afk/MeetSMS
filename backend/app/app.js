@@ -8,18 +8,19 @@ dotenv.config();
 // local imports
 import { errorHandler } from "../utils/errorHandler.js";
 import { morganMiddleware } from "../middleware/morgan.middleware.js";
+import { env } from "../config/env.js";
+import { apiLimiter } from "../middleware/ratelimit.middleware.js";
+import { requestIdMiddleware } from "../middleware/requestId.middleware.js";
 
 // routes imports
 import userRoutes from "../routes/user.routes.js";
 import studentroute from "../routes/student.routes.js";
 
-// local imports
-import { env } from "../config/env.js";
-import { apiLimiter } from "../middleware/ratelimit.middleware.js";
 
 const app = express();
 
 // middlewares
+app.use(requestIdMiddleware)
 app.use(helmet());
 app.use(morganMiddleware);
 app.use(express.json());

@@ -15,3 +15,11 @@ export const logger = winston.createLogger({
     }),
   ],
 });
+
+export const withRequestContext = (req) => {
+  return {
+    requestId: req?.requestId,
+    method: req?.method,
+    path: req?.originalUrl,
+  };
+};

@@ -11,6 +11,7 @@ const envSchema = z.object({
   MONGODB_URL: z.string().min(1, "MONGODB_URL is required"),
   JWT_SECRET: z.string().min(1, "JWT_SECRET is required"),
   CLIENT_URL: z.string().min(1, "CLIENT_URL is required"),
+  NODE_ENV: z.string().min(1, "NODE_ENV.r is required"),
 
   PORT: z
     .string()
