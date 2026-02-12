@@ -30,11 +30,11 @@ app.use(
     credentials: true,
   }),
 );
-app.use(apiLimiter)
+// app.use(apiLimiter)
 
 // routes
 app.use("/user", userRoutes);
-app.use("/students", studentroute);
+app.use("/api/students", studentroute);
 
 app.use(errorHandler);
 

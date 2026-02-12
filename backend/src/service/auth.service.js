@@ -1,5 +1,6 @@
 // libs import
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken"
 
 // local imports
 import { ApiError } from "../utils/ApiError.js";
@@ -7,6 +8,7 @@ import {
   findUserByEmailRepo,
   createUserRepo,
 } from "../repository/user.repository.js";
+import { env } from "../config/env.js";
 
 export const registerUserService = async (data) => {
   const { username, email, password } = data;
@@ -51,7 +53,7 @@ export const loginUserService = async (data) => {
     throw new ApiError(401, "Invalid credentials");
   }
 
-  const accessToken = jwt.sign({ userId: user._id }, env.JWT_SECRET, {
+  const accessToken = jwt.sign({ userId: user._id }, env?.JWT_SECRET, {
     expiresIn: "7d",
   });
 

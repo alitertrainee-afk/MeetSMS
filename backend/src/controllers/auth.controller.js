@@ -1,7 +1,11 @@
 // local imports
 import { successResponse } from "../utils/response.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { logger } from "../config/logger.js";
+import { logger, withRequestContext } from "../config/logger.js";
+import {
+  loginUserService,
+  registerUserService,
+} from "../service/auth.service.js";
 
 export const register = asyncHandler(async (req, res) => {
   await registerUserService(req.body);

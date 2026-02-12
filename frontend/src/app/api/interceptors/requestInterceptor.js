@@ -5,7 +5,7 @@ import { useAuthStore } from '@/stores/modules/authStore'
 export const setupRequestInterceptor = (apiCLient) => {
   apiCLient.interceptors.request.use(
     (config) => {
-      const token = getLocalStorage('auth')?.accessToken;
+      const token = getLocalStorage('acadly-auth')?.accessToken;
       console.log("🚀 ~ setupRequestInterceptor ~ token:", token)
 
       if (token) {

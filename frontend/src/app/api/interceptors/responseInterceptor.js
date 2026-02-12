@@ -11,20 +11,10 @@ export const setupResponseInterceptor = (apiCLient) => {
     (error) => {
       // Handle 401 Unauthorized (invalid or expired token)
       if (error.response?.status === 401) {
-        const authStore = useAuthStore()
-        
-        // Clear invalid token from localStorage
-        removeLocalStorage('accessToken')
-        
-        // Clear auth store
-        authStore.setAuthError(error.response?.data?.message || 'Session expired. Please login again.')
-        authStore.setAuthUser(null)
-        authStore.setAuthAccessToken('')
-        
-        // Redirect to login
-        router.push({ name: 'Login' })
+        localStorage.clear()
+        window.location.href = '/login'
       }
-      
+
       return Promise.reject(error)
     },
   )

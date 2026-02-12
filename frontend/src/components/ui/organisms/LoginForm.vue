@@ -1,37 +1,48 @@
 <script setup>
-// libs imports
 import { reactive } from 'vue'
 
-// UI Imports - [Molecules]
-import TextInputField from '@/components/ui/molecules/TextInputField.vue'
-import PasswordInputField from '@/components/ui/molecules/PasswordInputField.vue'
+import { useAuthStore } from '@/stores/modules/auth.store'
+import BaseInput from '../atoms/BaseInput.vue'
+import BaseButton from '../atoms/BaseButton.vue'
+import FormField from '../molecules/FormField.vue'
 
-// UI Imports - [Atoms]
-import BaseButton from '@/components/ui/atoms/BaseButton.vue'
-
-defineProps({
-  loading: Boolean,
-  error: String
-});
-
-const emit = defineEmits(['submit'])
+const auth = useAuthStore()
 
 const form = reactive({
   email: '',
   password: '',
 })
 
-const submitForm = () => {
-  emit('submit', { ...form })
+const submit = async () => {
+  try {
+    await auth.login(form)
+  } catch (_) {
+    // error is already handled in store
+  }
 }
 </script>
 
 <template>
-  <form class="space-y-4" @submit.prevent="submitForm">
-    <TextInputField label="Email" type="email" placeholder="you@example.com" v-model="form.email" />
+  <form @submit.prevent="submit" class="space-y-6">
+    <div class="text-center">
+      <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Sign in</h1>
+      <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+        Enter your credentials to continue
+      </p>
+    </div>
 
-    <PasswordInputField placeholder="*******" v-model="form.password" />
+    <FormField label="Email">
+      <BaseInput v-model="form.email" type="email" placeholder="you@example.com" required />
+    </FormField>
 
-    <BaseButton type="submit" :loading="loading"> Login </BaseButton>
+    <FormField label="Password">
+      <BaseInput v-model="form.password" type="password" placeholder="••••••••" required />
+    </FormField>
+
+    <p v-if="auth.error" class="text-sm text-red-600 text-center">
+      {{ auth.error }}
+    </p>
+
+    <BaseButton type="submit" :loading="auth.loading" class="w-full"> Sign In </BaseButton>
   </form>
 </template>
