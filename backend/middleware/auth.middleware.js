@@ -16,6 +16,7 @@ export const verifyToken = (req, res, next) => {
 
     // 2. Bearer scheme validation
     const parts = authHeader.split(" ");
+    console.log("🚀 ~ verifyToken ~ parts:", parts)
 
     if (parts.length !== 2 || parts[0] !== "Bearer") {
       return res.status(401).json({

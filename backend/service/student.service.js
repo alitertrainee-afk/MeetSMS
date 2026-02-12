@@ -1,8 +1,8 @@
 // local imports
 import { ApiError } from "../utils/ApiError.js";
-import { createStudentRepo } from "../repositories/student.repository.js";
 import {
-    deactivateStudentByIdRepo,
+  createStudentRepo,
+  deactivateStudentByIdRepo,
   fetchStudentsRepo,
   findStudentByIdRepo,
   updateStudentRepo,
