@@ -9,6 +9,8 @@ import {
   deactivateStudent,
 } from "../repository/student.repository.js";
 import { logger } from "../config/logger.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiError } from "../utils/ApiError.js";
 
 // Add new student to database
 export const addStudent = async (req, res) => {
@@ -39,31 +41,26 @@ export const addStudent = async (req, res) => {
 };
 
 // fetch all the students fromt the database
-export const getAllStudent = async (req, res) => {
-  try {
-    const students = await fatcheStudent();
+export const getAllStudent = asyncHandler(async (req, res) => {
+  const students = await fatcheStudent();
 
-    if (students?.length === 0) {
-      return res.status(200).json({
-        meta: { success: true, message: "No Student Found" },
-        data: { students },
-      });
-    }
-
-    return res.status(200).json({
-      meta: { success: true, message: "student fetch successfully" },
-      data: { students },
+  if (students?.length === 0) {
+    return successResponse(res, {
+      statusCode: 201,
+      message: "Logged in successfully",
+      data: {},
     });
-  } catch (err) {
-    return res
-      .status(500)
-      .json({ meta: { success: false, message: err.message }, data: {} });
   }
-};
+
+  return res.status(200).json({
+    meta: { success: true, message: "student fetch successfully" },
+    data: { students },
+  });
+});
 
 // update current student details
-export const updateStudent = async (req, res) => {
-  try {
+export const updateStudent =asyncHandler (async (req, res) => {
+
     const { id } = req.params;
 
     if (!id) {
@@ -75,22 +72,19 @@ export const updateStudent = async (req, res) => {
     const student = await editStudent(id, req.body);
 
     if (!student) {
-      return res.status(404).json({
-        meta: { success: false, message: "Student not found" },
-      });
+      throw new ApiError(404 , "Student not found")
+      // return res.status(404).json({
+      //   meta: { success: false, message: "Student not found" },
+      // });
     }
 
     return res.status(200).json({
       meta: { success: true, message: "Student updated successfully" },
       data: { student },
     });
-  } catch (error) {
-    return res.status(500).json({
-      meta: { success: false, message: error.message },
-      data: {},
-    });
-  }
-};
+ 
+  
+})
 
 // delete individual student by id
 export const deleteStudent = async (req, res) => {

@@ -1,6 +1,5 @@
 // libs import
-import dotenv from "dotenv";
-dotenv.config();
+
 
 // local imports
 import { connect } from "./database/db.js";
@@ -11,7 +10,7 @@ import { env } from "./config/env.js";
 connect()
   .then(() => {
     app.listen(env.PORT, () => {
-      logger.info(`server listen on port${PORT}`);
+      logger.info(`server listen on port${env.PORT}`);
     });
   })
   .catch((error) => {
