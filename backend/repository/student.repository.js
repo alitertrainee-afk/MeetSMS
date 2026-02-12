@@ -11,6 +11,11 @@ export const fatcheStudent = async () => {
   return allStudent;
 };
 
+export const fetchStudentById = async (id) => {
+  const student = await Student.findById(id);
+  return student;
+}
+
 export const editStudent = async (id, data) => {
   const updatedStudent = await Student.findByIdAndUpdate(
     id,
@@ -24,7 +29,7 @@ export const editStudent = async (id, data) => {
   return updatedStudent;
 };
 
-export const deactivateStudent = async (id) => {
+export const deactivateStudentById = async (id) => {
   const student = await Student.findByIdAndUpdate(
     id,
     { isActive: false },
