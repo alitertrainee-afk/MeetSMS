@@ -34,7 +34,7 @@ app.use(
 
 // routes
 app.use("/user", userRoutes);
-app.use("/api/students", studentroute);
+app.use("/students", studentroute);
 
 app.use(errorHandler);
 
