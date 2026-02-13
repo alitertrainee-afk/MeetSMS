@@ -3,9 +3,7 @@ import Layout from '../layout/Main/Layout.vue'
 import AuthLayout from '@/layout/Auth/AuthLayout.vue'
 import LoginView from '@/pages/LoginView.vue'
 import RegisterView from '@/pages/RegisterView.vue'
-import { getLocalStorage } from '@/service/localStorageService'
-import { useAuthStore } from '@/stores/modules/authStore'
-import { storeToRefs } from 'pinia'
+import { useAuthStore } from '@/stores/modules/auth.store'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -42,15 +40,13 @@ const router = createRouter({
 })
 
 router.beforeEach((to) => {
-  const authStore = getLocalStorage('auth')
+  const auth = useAuthStore();
 
-  const isAuthenticated = !!authStore?.accessToken
-
-  if (to.meta.requiresAuth && !isAuthenticated) {
+  if (to.meta.requiresAuth && !auth?.isAuthenticated) {
     return { name: 'Login' }
   }
 
-  if (isAuthenticated && (to.name === 'Login' || to.name === 'Register')) {
+  if (auth?.isAuthenticated && (to.name === 'Login' || to.name === 'Register')) {
     return { name: 'Home' }
   }
 

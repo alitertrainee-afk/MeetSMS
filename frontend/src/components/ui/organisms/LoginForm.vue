@@ -5,7 +5,9 @@ import { useAuthStore } from '@/stores/modules/auth.store'
 import BaseInput from '../atoms/BaseInput.vue'
 import BaseButton from '../atoms/BaseButton.vue'
 import FormField from '../molecules/FormField.vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const auth = useAuthStore()
 
 const form = reactive({
@@ -14,10 +16,10 @@ const form = reactive({
 })
 
 const submit = async () => {
-  try {
-    await auth.login(form)
-  } catch (_) {
-    // error is already handled in store
+  await auth.login(form)
+  if (auth.isAuthenticated) {
+    console.log("🚀 ~ submit ~ isAuthenticated:", auth.isAuthenticated)
+    router.push('/')
   }
 }
 </script>
@@ -43,6 +45,6 @@ const submit = async () => {
       {{ auth.error }}
     </p>
 
-    <BaseButton type="submit" :loading="auth.loading" class="w-full"> Sign In </BaseButton>
+    <BaseButton :loading="auth.loading" type="submit" class="w-full"> Sign In </BaseButton>
   </form>
 </template>

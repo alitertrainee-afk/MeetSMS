@@ -11,6 +11,7 @@ defineProps({
 
 <template>
   <button
+    v-bind="$attrs"
     :type="type"
     :disabled="disabled || loading"
     class="inline-flex items-center justify-center gap-2 h-10 px-4 rounded-lg text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
